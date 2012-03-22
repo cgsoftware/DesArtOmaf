@@ -29,10 +29,13 @@ class FiscalDocRighe(osv.osv):
        
        return desvar
 
-   def onchange_articolo(self, cr, uid, ids, product_id, listino_id, qty, partner_id, data_doc, uom):
+   def onchange_articolo(self, cr, uid, ids, product_id, listino_id, qty, partner_id, data_doc, uom,context):
     v = {}
-    res = super(FiscalDocRighe, self).onchange_articolo(cr, uid, ids, product_id, listino_id, qty, partner_id, data_doc, uom)
-    v = res.get('value', False)   
+    res = super(FiscalDocRighe, self).onchange_articolo(cr, uid, ids, product_id, listino_id, qty, partner_id, data_doc, uom,context)
+    v = res.get('value', False)
+    warning = res.get('warning', False)
+    domain = res.get('domain', False)
+       
     if product_id:             
             product_obj = self.pool.get('product.product')
             riga_art = product_obj.browse(cr, uid, product_id)   
@@ -52,6 +55,6 @@ class FiscalDocRighe(osv.osv):
                    else:
                       v['descrizione_riga'] = riga_art.name
 
-            
-    return {'value':v}
+    return {'value': v, 'domain': domain, 'warning': warning}            
+    #return {'value':v}
 FiscalDocRighe()
