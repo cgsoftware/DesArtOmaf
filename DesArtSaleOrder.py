@@ -17,13 +17,14 @@ class sale_order_line(osv.osv):
 
    def des_variants(self,cr,uid,product_id,context):
        desvar = ""
+       var_obj = self.pool.get('product.product')
        if product_id:            
             product_obj = self.pool.get('product.product')
             riga_art = product_obj.browse(cr, uid, product_id)  
             if riga_art.dimension_value_ids:
-                for variante in riga_art.dimension_value_ids:
+                for variante in var_obj._varianti_ordinate(cr,uid,[riga_art.id],context):
                     #import pdb;pdb.set_trace()
-                    desvar += variante.dimension_id.desc_type+':'+variante.desc_value+' - '
+                    desvar += variante[3].dimension_id.desc_type+':'+variante[3].desc_value+' - '
             if riga_art.marchio_ids:
                 desvar +=  "Marchio:" + riga_art.marchio_ids.name
        
