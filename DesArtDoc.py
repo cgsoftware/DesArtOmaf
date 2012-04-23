@@ -21,10 +21,10 @@ class FiscalDocRighe(osv.osv):
        if product_id:            
             product_obj = self.pool.get('product.product')
             riga_art = product_obj.browse(cr, uid, product_id)  
+            lst = var_obj._varianti_ordinate(cr, uid, [product_id], context)
             #import pdb;pdb.set_trace()
             if riga_art.dimension_value_ids:
-                for variante in var_obj._varianti_ordinate(cr,uid,[riga_art.id],context):
-                    
+                for variante in sorted(lst,key=lambda sequence:sequence[0]):                    
                     desvar += variante[3].dimension_id.desc_type+':'+variante[3].desc_value+' - '
             if riga_art.marchio_ids:
                 desvar +=  "Marchio:" + riga_art.marchio_ids.name
@@ -45,17 +45,17 @@ class FiscalDocRighe(osv.osv):
                 #import pdb;pdb.set_trace()
                 if riga_art.description_sale:
                     if riga_art.variants: 
-                     v['descrizione_riga'] = riga_art.name + " - " + self.des_variants(cr, uid, product_id, context=False) + " - " + riga_art.description_sale
+                     v['descrizione_riga'] = '['+riga_art.default_code+'] '+riga_art.name + " - " + self.des_variants(cr, uid, product_id, context=False) + " - " + riga_art.description_sale
                      #+ " - " + riga_art.description_sale
                     else:
-                      v['descrizione_riga'] = riga_art.name + " - " + riga_art.description_sale
+                      v['descrizione_riga'] = '['+riga_art.default_code+'] '+riga_art.name + " - " + riga_art.description_sale
                       #+ " - " + riga_art.description_sale
                 else:
                    if riga_art.variants:
-                      v['descrizione_riga'] = riga_art.name + " - " + self.des_variants(cr, uid, product_id, context=False) 
+                      v['descrizione_riga'] ='['+riga_art.default_code+'] '+ riga_art.name + " - " + self.des_variants(cr, uid, product_id, context=False) 
 #+ riga_art.variants
                    else:
-                      v['descrizione_riga'] = riga_art.name
+                      v['descrizione_riga'] = '['+riga_art.default_code+'] '+riga_art.name
 
     return {'value': v, 'domain': domain, 'warning': warning}            
     #return {'value':v}
