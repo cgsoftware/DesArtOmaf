@@ -45,17 +45,21 @@ class FiscalDocRighe(osv.osv):
                 #import pdb;pdb.set_trace()
                 if riga_art.description_sale:
                     if riga_art.variants: 
-                     v['descrizione_riga'] = '['+riga_art.default_code+'] '+riga_art.name + " - " + self.des_variants(cr, uid, product_id, context=False) + " - " + riga_art.description_sale
+                     #v['descrizione_riga'] = '['+riga_art.default_code+'] '+riga_art.name + " - " + self.des_variants(cr, uid, product_id, context=False) + " - " + riga_art.description_sale
+                     v['descrizione_riga'] = riga_art.name + " - " + self.des_variants(cr, uid, product_id, context=False) + " - " + riga_art.description_sale
                      #+ " - " + riga_art.description_sale
                     else:
-                      v['descrizione_riga'] = '['+riga_art.default_code+'] '+riga_art.name + " - " + riga_art.description_sale
+                      #v['descrizione_riga'] = '['+riga_art.default_code+'] '+riga_art.name + " - " + riga_art.description_sale
+                      v['descrizione_riga'] = riga_art.name + " - " + riga_art.description_sale
                       #+ " - " + riga_art.description_sale
                 else:
                    if riga_art.variants:
-                      v['descrizione_riga'] ='['+riga_art.default_code+'] '+ riga_art.name + " - " + self.des_variants(cr, uid, product_id, context=False) 
+                     # v['descrizione_riga'] ='['+riga_art.default_code+'] '+ riga_art.name + " - " + self.des_variants(cr, uid, product_id, context=False)
+                      v['descrizione_riga'] = riga_art.name + " - " + self.des_variants(cr, uid, product_id, context=False)  
 #+ riga_art.variants
                    else:
-                      v['descrizione_riga'] = '['+riga_art.default_code+'] '+riga_art.name
+                     # v['descrizione_riga'] = '['+riga_art.default_code+'] '+riga_art.name
+                      v['descrizione_riga'] = riga_art.name
 
     return {'value': v, 'domain': domain, 'warning': warning}            
     #return {'value':v}
