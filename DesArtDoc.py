@@ -37,16 +37,19 @@ class FiscalDocRighe(osv.osv):
     v = res.get('value', False)
     warning = res.get('warning', False)
     domain = res.get('domain', False)
-       
+    lang = False
+    if partner_id:
+        lang = self.pool.get('res.partner').browse(cr, uid, partner_id).lang
+    context = {'lang': lang}   
     if product_id:             
             product_obj = self.pool.get('product.product')
-            riga_art = product_obj.browse(cr, uid, product_id)   
+            riga_art = product_obj.browse(cr, uid, product_id, context)   
             if riga_art:
                 #import pdb;pdb.set_trace()
                 if riga_art.description_sale:
                     if riga_art.variants: 
                      #v['descrizione_riga'] = '['+riga_art.default_code+'] '+riga_art.name + " - " + self.des_variants(cr, uid, product_id, context=False) + " - " + riga_art.description_sale
-                     v['descrizione_riga'] = riga_art.name + " - " + self.des_variants(cr, uid, product_id, context=False) + " - " + riga_art.description_sale
+                     v['descrizione_riga'] = riga_art.name + " - " + self.des_variants(cr, uid, product_id, context) + " - " + riga_art.description_sale
                      #+ " - " + riga_art.description_sale
                     else:
                       #v['descrizione_riga'] = '['+riga_art.default_code+'] '+riga_art.name + " - " + riga_art.description_sale
@@ -55,7 +58,7 @@ class FiscalDocRighe(osv.osv):
                 else:
                    if riga_art.variants:
                      # v['descrizione_riga'] ='['+riga_art.default_code+'] '+ riga_art.name + " - " + self.des_variants(cr, uid, product_id, context=False)
-                      v['descrizione_riga'] = riga_art.name + " - " + self.des_variants(cr, uid, product_id, context=False)  
+                      v['descrizione_riga'] = riga_art.name + " - " + self.des_variants(cr, uid, product_id, context)  
 #+ riga_art.variants
                    else:
                      # v['descrizione_riga'] = '['+riga_art.default_code+'] '+riga_art.name
