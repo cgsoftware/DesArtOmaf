@@ -26,8 +26,8 @@
     'description': """Costruisce la descrizione Articoli sui Documenti""",
     'author': 'C & G Software sas',
     'website': 'http://www.cgsoftware.it',
-    "depends" : [ 'ItalianFiscalDocument','sale'],
-    "update_xml" : [],
+    "depends" : [ 'ItalianFiscalDocument','sale','Conai'],
+    "update_xml" : ['Partner.xml'],
 
     "active": False,
     "installable": True

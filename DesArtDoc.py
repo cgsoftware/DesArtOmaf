@@ -38,8 +38,10 @@ class FiscalDocRighe(osv.osv):
     warning = res.get('warning', False)
     domain = res.get('domain', False)
     lang = False
+    partner = False
     if partner_id:
         lang = self.pool.get('res.partner').browse(cr, uid, partner_id).lang
+        partner = self.pool.get('res.partner').browse(cr, uid, partner_id)
     context = {'lang': lang}   
     if product_id:             
             product_obj = self.pool.get('product.product')
@@ -63,7 +65,23 @@ class FiscalDocRighe(osv.osv):
                    else:
                      # v['descrizione_riga'] = '['+riga_art.default_code+'] '+riga_art.name
                       v['descrizione_riga'] = riga_art.name
+            if partner:
+                if partner.flag_des_peso:
+                    if riga_art.peso_prod:
+                        # è presente un peso Conai
+                         v['descrizione_riga'] = v['descrizione_riga'] + "- Peso Unitario Conai : "+str(riga_art.peso_prod)
+                
 
     return {'value': v, 'domain': domain, 'warning': warning}            
     #return {'value':v}
+    
+    
 FiscalDocRighe()
+
+
+class res_partner(osv.osv):
+   _inherit = "res.partner"
+   _columns ={
+              'flag_des_peso':fields.boolean("Stampa del Peso Conai"),
+              }
+res_partner()

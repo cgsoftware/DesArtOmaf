@@ -42,6 +42,7 @@ class sale_order_line(osv.osv):
         product_id = product
         if partner_id:
             lang = self.pool.get('res.partner').browse(cr, uid, partner_id).lang
+            partner = self.pool.get('res.partner').browse(cr, uid, partner_id)
         context = {'lang': lang}  
         if product_id:             
             product_obj = self.pool.get('product.product')
@@ -60,6 +61,12 @@ class sale_order_line(osv.osv):
                       v['name'] = riga_art.name + " - " + self.des_variants(cr, uid, product_id, context=False) 
                    else:
                       v['name'] = riga_art.name
+            if partner:
+                if partner.flag_des_peso:
+                    if riga_art.peso_prod:
+                        # è presente un peso Conai
+                         v['name'] = v['name'] + "- Peso Unitario Conai : "+str(riga_art.peso_prod)
+                      
         
         return {'value': v, 'domain': domain, 'warning': warning}
 
